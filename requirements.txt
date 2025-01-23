@@ -2,10 +2,10 @@ fastapi
 uvicorn
 sqlalchemy
 psycopg2-binary
-redis
 passlib
 python-jose[cryptography]
 python-multipart
 pydantic
 pydantic-settings
 httpx
+redis>=4.5.0

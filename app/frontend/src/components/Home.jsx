@@ -1,6 +1,7 @@
 import React, { useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import AuthContext from '../context/AuthContext';
+import axios from 'axios';
 
 function Home() {
   const { isAuthenticated, setIsAuthenticated } = useContext(AuthContext);
@@ -9,16 +10,34 @@ function Home() {
   // Retrieve the user's email from localStorage
   const userEmail = localStorage.getItem('email');
 
-  const handleLogout = () => {
-    // Remove the token and email from localStorage
-    localStorage.removeItem('token');
-    localStorage.removeItem('email');
+  const handleLogout = async () => {
+    try {
+      // Get the token from localStorage
+      const token = localStorage.getItem('token');
 
-    // Set the authentication state to false
-    setIsAuthenticated(false);
+      // Send a request to the backend to blacklist the token
+      await axios.post(
+        'http://localhost:8000/logout',
+        {},
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
 
-    // Redirect the user to the login page
-    navigate('/login');
+      // Remove the token and email from localStorage
+      localStorage.removeItem('token');
+      localStorage.removeItem('email');
+
+      // Set the authentication state to false
+      setIsAuthenticated(false);
+
+      // Redirect the user to the login page
+      navigate('/login');
+    } catch (error) {
+      console.error('Logout failed:', error);
+    }
   };
 
   // If the user is not authenticated, redirect to the login page
