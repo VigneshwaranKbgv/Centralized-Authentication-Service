@@ -31,7 +31,7 @@ This project provides a centralized authentication service with support for **em
 ### Prerequisites
 
 - Python 3.11
-- Node.js (for frontend)
+- Node.js (Development tool for frontend)
 - PostgreSQL
 - Redis
 - Google OAuth2 credentials (Client ID and Client Secret)
