@@ -4,6 +4,9 @@ This project provides a centralized authentication service with support for **em
 
 ---
 
+![Screenshot 2025-02-14 191101](https://github.com/user-attachments/assets/61c777a5-83ef-4645-af49-b3c338d0a6a4)
+![Screenshot 2025-02-14 191119](https://github.com/user-attachments/assets/c926c6f1-8f7a-41bb-9dbf-9f68970e1d3a)
+
 ## Features
 
 - **User Registration**: Register new users with email and password.
