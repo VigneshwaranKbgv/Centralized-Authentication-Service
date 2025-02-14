@@ -20,3 +20,12 @@ node_modules/
 
 # Logs
 *.log
+
+# Environment variables
+.env
+.env.local
+.env.development
+.env.production
+
+# But keep example files
+!.env.example

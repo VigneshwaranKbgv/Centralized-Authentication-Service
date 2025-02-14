@@ -2,6 +2,7 @@ import React, { useState, useContext } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { login } from '../services/authService';
 import AuthContext from '../context/AuthContext';
+import '../styles/auth.css';
 
 function Login() {
   const [email, setEmail] = useState('');
@@ -38,25 +39,32 @@ function Login() {
 
   return (
     <div className="login-container">
-      <h2>Login</h2>
+      <h1>Centralized Authentication Service</h1>
+      <h2>Welcome Back</h2>
+      <p className="service-description">
+        Secure, Simple, and Seamless Authentication Solution
+      </p>
       <form onSubmit={handleSubmit}>
         <input
           type="email"
-          placeholder="Email"
+          placeholder="Enter your email"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
         />
         <input
           type="password"
-          placeholder="Password"
+          placeholder="Enter your password"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
         />
-        <button type="submit">Login</button>
+        <button type="submit">Sign In</button>
       </form>
-      <button onClick={handleGoogleLogin}>Login with Google</button>
+      <button className="google-button" onClick={handleGoogleLogin}>
+        <img src="/google-icon.svg" alt="Google" width="18" height="18" />
+        Continue with Google
+      </button>
       <p>
-        Don't have an account? <Link to="/register">Register here</Link>
+        Don't have an account? <Link to="/register">Create Account</Link>
       </p>
     </div>
   );

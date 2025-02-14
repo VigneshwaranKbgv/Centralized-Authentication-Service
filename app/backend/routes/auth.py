@@ -3,7 +3,15 @@ from fastapi.security import OAuth2PasswordRequestForm
 from sqlalchemy.orm import Session
 import httpx
 from fastapi.responses import JSONResponse, RedirectResponse
-from ..core.security import create_access_token, get_password_hash, verify_password, decode_token, is_token_blacklisted, oauth2_scheme, authenticate_user
+from ..core.security import (
+    create_access_token, 
+    get_password_hash, 
+    verify_password, 
+    decode_token, 
+    is_token_blacklisted, 
+    oauth2_scheme, 
+    authenticate_user
+)
 from ..models.user import User
 from ..core.config import settings
 from ..services.auth_service import get_db, get_user_by_email, create_user
@@ -13,10 +21,13 @@ from ..core.rate_limiter import rate_limit
 from ..core.session_manager import store_session, get_session
 from ..core.security import add_to_blacklist
 
-router = APIRouter()
+router = APIRouter(
+    prefix="/auth",
+    tags=["authentication"]
+)
 
 # Endpoint for Google OAuth2 login
-@router.get("/auth/google")
+@router.get("/google")
 def login_google():
     google_auth_url = (
         f"https://accounts.google.com/o/oauth2/auth?"
@@ -30,7 +41,7 @@ def login_google():
     return RedirectResponse(url=google_auth_url)
 
 # Endpoint for Google OAuth2 callback
-@router.get("/auth/google/callback")
+@router.get("/google/callback")
 def callback(code: str, db: Session = Depends(get_db)):
     # Exchange the code for a token
     token_url = "https://oauth2.googleapis.com/token"

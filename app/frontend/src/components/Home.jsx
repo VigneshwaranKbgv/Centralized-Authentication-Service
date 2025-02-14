@@ -1,7 +1,8 @@
 import React, { useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import AuthContext from '../context/AuthContext';
-import axios from 'axios';
+import { logout } from '../services/authService';
+import '../styles/auth.css';
 
 function Home() {
   const { isAuthenticated, setIsAuthenticated } = useContext(AuthContext);
@@ -12,28 +13,8 @@ function Home() {
 
   const handleLogout = async () => {
     try {
-      // Get the token from localStorage
-      const token = localStorage.getItem('token');
-
-      // Send a request to the backend to blacklist the token
-      await axios.post(
-        'http://localhost:8000/logout',
-        {},
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-
-      // Remove the token and email from localStorage
-      localStorage.removeItem('token');
-      localStorage.removeItem('email');
-
-      // Set the authentication state to false
+      await logout();
       setIsAuthenticated(false);
-
-      // Redirect the user to the login page
       navigate('/login');
     } catch (error) {
       console.error('Logout failed:', error);
@@ -47,10 +28,32 @@ function Home() {
   }
 
   return (
-    <div>
-      <h1>Welcome to the Home Page</h1>
-      <p>You are logged in as: {userEmail}</p>
-      <button onClick={handleLogout}>Logout</button>
+    <div className="home-container">
+      <div className="welcome-header">
+        <h1>Welcome Back, {userEmail}</h1>
+        <p className="user-info">Your secure authentication dashboard</p>
+        <button className="logout-button" onClick={handleLogout}>
+          Logout
+        </button>
+      </div>
+
+      <div className="features-grid">
+        <div className="feature-card">
+          <img src="/images/security.svg" alt="Security" className="feature-icon" />
+          <h3>Secure Authentication</h3>
+          <p>Your data is protected with industry-standard security protocols and encryption.</p>
+        </div>
+        <div className="feature-card">
+          <img src="/images/integration.svg" alt="Integration" className="feature-icon" />
+          <h3>Google Integration</h3>
+          <p>Seamlessly sign in with your Google account for quick access.</p>
+        </div>
+        <div className="feature-card">
+          <img src="/images/speed.svg" alt="Speed" className="feature-icon" />
+          <h3>Fast & Reliable</h3>
+          <p>Experience lightning-fast authentication with our optimized service.</p>
+        </div>
+      </div>
     </div>
   );
 }

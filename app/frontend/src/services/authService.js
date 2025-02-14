@@ -3,21 +3,36 @@ import axios from 'axios';
 const API_URL = 'http://localhost:8000';
 
 export const login = async (credentials) => {
-  // Convert the credentials object to URL-encoded format
   const formData = new URLSearchParams();
-  formData.append('username', credentials.username); // Use 'username' instead of 'email'
+  formData.append('username', credentials.username);
   formData.append('password', credentials.password);
 
-  const response = await axios.post(`${API_URL}/token`, formData, {
+  const response = await axios.post(`${API_URL}/auth/login`, formData, {
     headers: {
-      'Content-Type': 'application/x-www-form-urlencoded', // Set the correct content type
+      'Content-Type': 'application/x-www-form-urlencoded',
     },
   });
   return response.data;
 };
 
-export const register = async (user) => {
-  const response = await axios.post(`${API_URL}/register`, user);
+export const logout = async () => {
+  const token = localStorage.getItem('token');
+  try {
+    await axios.post(`${API_URL}/auth/logout`, null, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    localStorage.removeItem('token');
+    localStorage.removeItem('email');
+  } catch (error) {
+    console.error('Logout error:', error);
+    throw error;
+  }
+};
+
+export const register = async (userData) => {
+  const response = await axios.post(`${API_URL}/auth/register`, userData);
   return response.data;
 };
 

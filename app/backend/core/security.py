@@ -70,3 +70,21 @@ def authenticate_user(db: Session, email: str, password: str) -> User:
     if not verify_password(password, user.hashed_password):
         return None  # Incorrect password
     return user
+
+def create_reset_token(email: str) -> str:
+    expire = datetime.utcnow() + timedelta(minutes=settings.RESET_TOKEN_EXPIRE_MINUTES)
+    to_encode = {
+        "exp": expire,
+        "email": email,
+        "type": "reset"
+    }
+    return jwt.encode(to_encode, settings.SECRET_KEY, algorithm=settings.ALGORITHM)
+
+def verify_reset_token(token: str) -> str:
+    try:
+        payload = jwt.decode(token, settings.SECRET_KEY, algorithms=[settings.ALGORITHM])
+        if payload.get("type") != "reset":
+            raise HTTPException(status_code=400, detail="Invalid token type")
+        return payload.get("email")
+    except JWTError:
+        raise HTTPException(status_code=400, detail="Invalid or expired token")
